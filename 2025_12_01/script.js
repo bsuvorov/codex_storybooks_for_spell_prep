@@ -89,6 +89,82 @@ let currentPage = 0;
 let currentUtterance = null;
 let currentAudio = null;
 const audioCache = new Map();
+let wordSpans = [];
+let wordBoundaries = [];
+let highlightInterval = null;
+let lastHighlightedIndex = -1;
+
+function setPageText(text) {
+  const words = text.split(/(\s+)/);
+  const container = document.createDocumentFragment();
+  const boundaries = [];
+  let charCursor = 0;
+  wordSpans = [];
+  words.forEach((segment) => {
+    if (/^\s+$/.test(segment)) {
+      container.appendChild(document.createTextNode(segment));
+      charCursor += segment.length;
+      return;
+    }
+    const span = document.createElement("span");
+    span.className = "page__word";
+    span.textContent = segment;
+    span.dataset.index = wordSpans.length;
+    wordSpans.push(span);
+    boundaries.push({
+      start: charCursor,
+      end: charCursor + segment.length,
+      index: wordSpans.length - 1,
+    });
+    container.appendChild(span);
+    charCursor += segment.length;
+  });
+  pageTextEl.innerHTML = "";
+  pageTextEl.appendChild(container);
+  wordBoundaries = boundaries;
+  lastHighlightedIndex = -1;
+}
+
+function clearWordHighlight() {
+  if (lastHighlightedIndex >= 0 && wordSpans[lastHighlightedIndex]) {
+    wordSpans[lastHighlightedIndex].classList.remove("page__word--active");
+  }
+  lastHighlightedIndex = -1;
+}
+
+function highlightWord(index) {
+  if (index === lastHighlightedIndex || !wordSpans[index]) return;
+  clearWordHighlight();
+  wordSpans[index].classList.add("page__word--active");
+  lastHighlightedIndex = index;
+}
+
+function stopHighlighting() {
+  clearInterval(highlightInterval);
+  highlightInterval = null;
+  clearWordHighlight();
+}
+
+function startTimedHighlight(durationMs) {
+  if (!wordSpans.length || !durationMs || durationMs === Infinity) return;
+  stopHighlighting();
+  const step = Math.max(durationMs / wordSpans.length, 50);
+  let index = 0;
+  highlightWord(index);
+  highlightInterval = setInterval(() => {
+    index += 1;
+    if (index >= wordSpans.length) {
+      stopHighlighting();
+      return;
+    }
+    highlightWord(index);
+  }, step);
+}
+
+function wordIndexFromChar(charIndex) {
+  if (!wordBoundaries.length) return -1;
+  return wordBoundaries.find((boundary) => charIndex >= boundary.start && charIndex < boundary.end)?.index ?? -1;
+}
 
 function getNarrationRate() {
   const rate = Number(speedSlider?.value || 0.9);
@@ -114,7 +190,7 @@ function renderPage() {
   const page = pages[currentPage];
   pageNumberEl.textContent = currentPage + 1;
   pageTitleEl.textContent = page.title;
-  pageTextEl.textContent = page.text;
+  setPageText(page.text);
   pageImageEl.innerHTML = "";
   const img = document.createElement("img");
   img.src = page.image.src;
@@ -134,6 +210,7 @@ function updateVoiceStatus(message, tone = "muted") {
 }
 
 function stopAllAudio() {
+  stopHighlighting();
   if (currentAudio) {
     currentAudio.pause();
     currentAudio.src = "";
@@ -169,6 +246,13 @@ function speakWithBrowser(text) {
   utterance.rate = getNarrationRate();
   utterance.pitch = 1;
   currentUtterance = utterance;
+  utterance.onstart = () => highlightWord(0);
+  utterance.onboundary = (event) => {
+    if (typeof event.charIndex !== "number") return;
+    const index = wordIndexFromChar(event.charIndex);
+    if (index >= 0) highlightWord(index);
+  };
+  utterance.onend = stopHighlighting;
   window.speechSynthesis.speak(utterance);
   updateVoiceStatus("Playing with your device voice.", "muted");
 }
@@ -176,6 +260,18 @@ function speakWithBrowser(text) {
 function playAudio(url) {
   stopAllAudio();
   currentAudio = new Audio(url);
+  currentAudio.addEventListener("loadedmetadata", () => {
+    if (isFinite(currentAudio.duration) && currentAudio.duration > 0) {
+      startTimedHighlight(currentAudio.duration * 1000);
+    }
+  });
+  currentAudio.addEventListener("playing", () => {
+    if (!highlightInterval && (!currentAudio.duration || !isFinite(currentAudio.duration))) {
+      const estimatedDuration = Math.max(wordSpans.length * 450, 3000);
+      startTimedHighlight(estimatedDuration);
+    }
+  });
+  currentAudio.addEventListener("ended", stopHighlighting);
   currentAudio.play().catch(() => {
     updateVoiceStatus("Could not start audio playback.", "warning");
   });

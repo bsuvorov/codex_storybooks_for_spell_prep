@@ -214,6 +214,19 @@ h3 {
   font-size: 16px;
 }
 
+.page__word {
+  display: inline-block;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.page__word--active {
+  background: rgba(239, 131, 84, 0.22);
+  color: #fff6e9;
+  box-shadow: 0 0 0 1px rgba(239, 131, 84, 0.35);
+}
+
 .controls {
   display: flex;
   gap: 8px;
