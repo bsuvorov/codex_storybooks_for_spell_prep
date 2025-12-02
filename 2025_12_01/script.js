@@ -93,6 +93,7 @@ let wordSpans = [];
 let wordBoundaries = [];
 let highlightInterval = null;
 let lastHighlightedIndex = -1;
+const spellingWords = new Set(quizBank.map((item) => item.answer.toLowerCase()));
 
 function setPageText(text) {
   const words = text.split(/(\s+)/);
@@ -108,6 +109,10 @@ function setPageText(text) {
     }
     const span = document.createElement("span");
     span.className = "page__word";
+    const normalized = segment.toLowerCase().replace(/[^a-z]/gi, "");
+    if (normalized && spellingWords.has(normalized)) {
+      span.classList.add("page__word--spelling");
+    }
     span.textContent = segment;
     span.dataset.index = wordSpans.length;
     wordSpans.push(span);
