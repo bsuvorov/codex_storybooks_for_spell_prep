@@ -221,10 +221,22 @@ h3 {
   transition: background-color 0.18s ease, color 0.18s ease;
 }
 
+.page__word--spelling {
+  background: rgba(96, 210, 197, 0.15);
+  color: #dbfff7;
+  box-shadow: 0 0 0 1px rgba(96, 210, 197, 0.35);
+}
+
 .page__word--active {
   background: rgba(239, 131, 84, 0.22);
   color: #fff6e9;
   box-shadow: 0 0 0 1px rgba(239, 131, 84, 0.35);
+}
+
+.page__word--spelling.page__word--active {
+  background: linear-gradient(120deg, rgba(239, 131, 84, 0.28), rgba(96, 210, 197, 0.2));
+  color: #fff8ef;
+  box-shadow: 0 0 0 1px rgba(239, 131, 84, 0.45), 0 0 0 3px rgba(96, 210, 197, 0.18);
 }
 
 .controls {

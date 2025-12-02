@@ -93,6 +93,7 @@ let wordSpans = [];
 let wordBoundaries = [];
 let highlightInterval = null;
 let lastHighlightedIndex = -1;
+const spellingWords = new Set(quizBank.map((item) => item.answer.toLowerCase()));
 
 function setPageText(text) {
   const words = text.split(/(\s+)/);
@@ -108,6 +109,10 @@ function setPageText(text) {
     }
     const span = document.createElement("span");
     span.className = "page__word";
+    const normalized = segment.toLowerCase().replace(/[^a-z]/gi, "");
+    if (normalized && spellingWords.has(normalized)) {
+      span.classList.add("page__word--spelling");
+    }
     span.textContent = segment;
     span.dataset.index = wordSpans.length;
     wordSpans.push(span);
@@ -379,6 +384,26 @@ updateVoiceStatus(
   "Google Cloud narration preferred when server is running; will fall back to your device voice if unavailable.",
   "muted"
 );
-renderPage();
-buildQuiz();
-updateSpeedLabel();
+
+function initializeStorybook() {
+  try {
+    renderPage();
+    buildQuiz();
+    updateSpeedLabel();
+  } catch (error) {
+    console.error(error);
+    updateVoiceStatus("Could not load the story content. Please refresh to try again.", "warning");
+    if (pageTextEl) {
+      pageTextEl.textContent = "We couldn't load the story text right now.";
+    }
+    if (pageImageEl) {
+      pageImageEl.innerHTML = "";
+    }
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeStorybook);
+} else {
+  initializeStorybook();
+}
