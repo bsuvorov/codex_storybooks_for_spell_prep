@@ -1,194 +1,51 @@
 const pages = [
   {
     title: "The Big Trip Begins",
-    text: "How do we fit everything in the RV? It is always a puzzle! We go on a big trip once a summer, and today is the day. I am so excited because my best friends, Siena, Lev, and Samuel, are coming too. \"Put these bags over there,\" said Dad. \"And put the painting supplies here on the table.\" We are all happy because we are going to the campground with the big pool!",
-    image: `
-<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="sky1" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop stop-color="#b3e5fc" offset="0%"/>
-      <stop stop-color="#e1f5fe" offset="100%"/>
-    </linearGradient>
-    <linearGradient id="rv1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop stop-color="#ffffff" offset="0%"/>
-      <stop stop-color="#d7e3f4" offset="100%"/>
-    </linearGradient>
-  </defs>
-  <rect width="320" height="220" fill="url(#sky1)"/>
-  <rect y="150" width="320" height="70" fill="#cfd8dc"/>
-  <rect x="140" y="150" width="36" height="30" rx="6" fill="#6d4c41" opacity="0.6"/>
-  <rect x="110" y="74" width="190" height="76" rx="14" fill="url(#rv1)" stroke="#90a4ae" stroke-width="3"/>
-  <rect x="122" y="88" width="46" height="28" rx="6" fill="#b3e5fc"/>
-  <rect x="176" y="88" width="52" height="28" rx="6" fill="#b3e5fc"/>
-  <rect x="238" y="88" width="46" height="28" rx="6" fill="#b3e5fc"/>
-  <rect x="118" y="120" width="170" height="10" rx="4" fill="#cfd8dc"/>
-  <circle cx="160" cy="152" r="14" fill="#263238"/>
-  <circle cx="160" cy="152" r="6" fill="#b0bec5"/>
-  <circle cx="262" cy="152" r="14" fill="#263238"/>
-  <circle cx="262" cy="152" r="6" fill="#b0bec5"/>
-  <rect x="70" y="122" width="32" height="46" rx="8" fill="#ffe082"/>
-  <rect x="48" y="126" width="22" height="42" rx="8" fill="#f48fb1"/>
-  <rect x="26" y="130" width="20" height="38" rx="8" fill="#81d4fa"/>
-  <circle cx="86" cy="118" r="12" fill="#fbc02d"/>
-  <circle cx="60" cy="122" r="10" fill="#ffb74d"/>
-  <circle cx="38" cy="126" r="9" fill="#80deea"/>
-  <rect x="84" y="154" width="10" height="20" rx="3" fill="#fbc02d"/>
-  <rect x="62" y="160" width="10" height="14" rx="3" fill="#f48fb1"/>
-  <rect x="40" y="162" width="10" height="12" rx="3" fill="#4db6ac"/>
-  <rect x="200" y="68" width="48" height="12" rx="6" fill="#ffcc80"/>
-  <circle cx="224" cy="60" r="14" fill="#ffb74d" opacity="0.9"/>
-  <text x="132" y="116" font-family="Arial" font-size="9" fill="#1565c0">Canvases</text>
-  <text x="255" y="111" font-family="Arial" font-size="9" fill="#37474f">Dad</text>
-  <text x="30" y="115" font-family="Arial" font-size="8" fill="#37474f">Friends</text>
-</svg>`
+    text: `How do we fit everything in the RV? It is always a puzzle! We go on a big trip once a summer, and today is the day. I am so excited because my best friends, Siena, Lev, and Samuel, are coming too. "Put these bags over there," said Dad. "And put the painting supplies here on the table." We are all happy because we are going to the campground with the big pool!`,
+    image: {
+      src: "https://image.pollinations.ai/prompt/cheerful%20illustration%20of%20a%20family%20and%20four%20kids%20packing%20an%20RV%20in%20a%20driveway%2C%20bright%20day%2C%20kid%20holding%20painting%20canvases%2C%20whimsical%20story%20book%20style%2C%20warm%20colors%2C%20digital%20painting%2C%20kids%20book%20art&width=900&height=700&format=jpeg",
+      alt: "A colorful driveway scene with a big RV and four kids helping parents pack, one holding painting canvases."
+    }
   },
   {
     title: "Meeting Pete",
-    text: "When we arrived, we saw a beautiful horse. \"What is his name?\" asked Samuel. \"His name is Pete,\" said the rancher. \"Isn't he cute?\" \"Look at those chickens!\" shouted Lev. Just then, a chicken jumped on a log. \"Here is a barn rule,\" said the rancher. \"Please keep your voices low. Put your voice on mute so you don't scare the animals.\"",
-    image: `
-<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
-  <rect width="320" height="220" fill="#f1f8e9"/>
-  <rect y="150" width="320" height="70" fill="#c5e1a5"/>
-  <rect x="34" y="110" width="252" height="10" fill="#d7ccc8"/>
-  <rect x="34" y="134" width="252" height="10" fill="#d7ccc8"/>
-  <rect x="60" y="90" width="12" height="80" fill="#a1887f"/>
-  <rect x="120" y="90" width="12" height="80" fill="#a1887f"/>
-  <rect x="180" y="90" width="12" height="80" fill="#a1887f"/>
-  <rect x="240" y="90" width="12" height="80" fill="#a1887f"/>
-  <ellipse cx="110" cy="152" rx="52" ry="20" fill="#bcaaa4"/>
-  <path d="M108 82c30 0 54 40 35 60s-54 12-64-10 9-50 29-50z" fill="#8d6e63"/>
-  <circle cx="124" cy="105" r="8" fill="#5d4037"/>
-  <circle cx="138" cy="112" r="4" fill="#263238"/>
-  <path d="M94 112c10-8 22-10 32-2" stroke="#3e2723" stroke-width="4" fill="none"/>
-  <circle cx="86" cy="128" r="6" fill="#fbc02d"/>
-  <path d="M64 160c10-15 24-18 38-8" stroke="#6d4c41" stroke-width="6" fill="none" stroke-linecap="round"/>
-  <g>
-    <circle cx="210" cy="160" r="12" fill="#ffcc80"/>
-    <circle cx="230" cy="165" r="9" fill="#ffb74d"/>
-    <circle cx="198" cy="168" r="9" fill="#ffe082"/>
-  </g>
-  <g>
-    <rect x="214" y="118" width="24" height="18" rx="6" fill="#fff59d"/>
-    <polygon points="214,136 228,142 238,136" fill="#fff176"/>
-    <circle cx="226" cy="124" r="3" fill="#ef6c00"/>
-  </g>
-  <rect x="252" y="82" width="46" height="46" rx="10" fill="#ffb74d"/>
-  <circle cx="270" cy="74" r="10" fill="#ffcc80"/>
-  <rect x="262" y="126" width="14" height="44" rx="5" fill="#6d4c41"/>
-  <text x="78" y="170" font-family="Arial" font-size="10" fill="#4e342e">Pete</text>
-  <text x="190" y="182" font-family="Arial" font-size="9" fill="#6d4c41">Chickens</text>
-  <text x="254" y="106" font-family="Arial" font-size="9" fill="#4e342e">Rancher</text>
-</svg>`
+    text: `When we arrived, we saw a beautiful horse. "What is his name?" asked Samuel. "His name is Pete," said the rancher. "Isn't he cute?" "Look at those chickens!" shouted Lev. Just then, a chicken jumped on a log. "Here is a barn rule," said the rancher. "Please keep your voices low. Put your voice on mute so you don't scare the animals."`,
+    image: {
+      src: "https://image.pollinations.ai/prompt/illustration%20of%20four%20kids%20at%20a%20sunny%20ranch%20fence%20meeting%20a%20brown%20horse%20with%20a%20white%20patch%2C%20cowboy%20rancher%20smiling%20and%20shushing%2C%20chickens%20pecking%20nearby%2C%20friendly%20children%27s%20book%20art%2C%20digital%20painting%2C%20vibrant%20colors&width=900&height=700&format=jpeg",
+      alt: "Kids greet a brown horse named Pete at a sunny ranch fence while a rancher smiles and chickens peck nearby."
+    }
   },
   {
     title: "The Swimming Pool",
-    text: "After visiting Pete, we ran to the pool. \"Watch how I do a handstand!\" I yelled. I did a gymnastics flip into the water. It was a big milestone for me! Siena and Lev cheered. Once we got out of the pool, we saw a toy that broke. \"I can fix it!\" said Samuel. \"I refuse to let it stay broken.\" We like Samuel because he is very helpful.",
-    image: `
-<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
-  <rect width="320" height="220" fill="#e3f2fd"/>
-  <rect x="18" y="44" width="284" height="152" rx="26" fill="#4fc3f7"/>
-  <rect x="32" y="60" width="256" height="120" rx="22" fill="#29b6f6"/>
-  <path d="M60 160c12-26 30-30 48-8" stroke="#b3e5fc" stroke-width="5" fill="none" stroke-linecap="round"/>
-  <circle cx="118" cy="126" r="18" fill="#fff9c4" opacity="0.8"/>
-  <rect x="136" y="136" width="46" height="18" rx="8" fill="#ffcc80" transform="rotate(-12 160 145)"/>
-  <rect x="80" y="88" width="24" height="44" rx="8" fill="#ff8a65"/>
-  <rect x="92" y="70" width="14" height="22" rx="8" fill="#ff8a65"/>
-  <rect x="106" y="70" width="8" height="40" rx="4" fill="#4db6ac" transform="rotate(70 110 90)"/>
-  <circle cx="92" cy="68" r="10" fill="#ffe082"/>
-  <path d="M88 68c6-5 12-5 18 0" stroke="#5d4037" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <rect x="186" y="142" width="30" height="16" rx="6" fill="#cfd8dc"/>
-  <path d="M190 148c0-8 20-8 20 0" stroke="#607d8b" stroke-width="3" fill="none" stroke-linecap="round"/>
-  <rect x="206" y="86" width="30" height="44" rx="10" fill="#81c784"/>
-  <circle cx="221" cy="80" r="10" fill="#aed581"/>
-  <rect x="214" y="128" width="10" height="20" rx="3" fill="#81c784"/>
-  <text x="70" y="156" font-family="Arial" font-size="10" fill="#0d47a1">Handstand!</text>
-  <text x="182" y="166" font-family="Arial" font-size="9" fill="#37474f">Broken toy</text>
-</svg>`
+    text: `After visiting Pete, we ran to the pool. "Watch how I do a handstand!" I yelled. I did a gymnastics flip into the water. It was a big milestone for me! Siena and Lev cheered. Once we got out of the pool, we saw a toy that broke. "I can fix it!" said Samuel. "I refuse to let it stay broken." We like Samuel because he is very helpful.`,
+    image: {
+      src: "https://image.pollinations.ai/prompt/bright%20pool%20scene%20with%20kids%20playing%2C%20one%20child%20doing%20a%20handstand%20in%20shallow%20water%2C%20friends%20cheering%2C%20another%20examining%20a%20broken%20toy%20boat%20on%20the%20deck%2C%20sunny%20summer%20day%2C%20whimsical%20children%27s%20book%20illustration%2C%20digital%20painting&width=900&height=700&format=jpeg",
+      alt: "Children at a bright blue pool, one doing a handstand in the water while others cheer and one studies a broken toy boat."
+    }
   },
   {
     title: "The Painting Party",
-    text: "On the eve of the last day, we decided to paint. We turned on a lantern that looked like a glowing globe. Suddenly, we heard a loud sound. Thump, thump, thump! \"Is it a stampede of horses?\" asked Siena. No! It was just Dad running to tell us dinner was ready. \"I made chicken!\" Dad said. \"How wonderful!\" we all shouted.",
-    image: `
-<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
-  <rect width="320" height="220" fill="#0c1a2e"/>
-  <circle cx="70" cy="70" r="36" fill="#ffe082" opacity="0.2"/>
-  <circle cx="70" cy="70" r="26" fill="#fff59d" opacity="0.5"/>
-  <circle cx="70" cy="70" r="18" fill="#fff9c4"/>
-  <rect x="30" y="126" width="260" height="16" rx="6" fill="#8d6e63"/>
-  <rect x="44" y="142" width="232" height="12" rx="6" fill="#a1887f"/>
-  <rect x="48" y="104" width="32" height="30" rx="8" fill="#ffcc80"/>
-  <rect x="92" y="108" width="32" height="30" rx="8" fill="#f48fb1"/>
-  <rect x="136" y="106" width="32" height="30" rx="8" fill="#4dd0e1"/>
-  <rect x="180" y="110" width="32" height="30" rx="8" fill="#aed581"/>
-  <rect x="224" y="108" width="32" height="30" rx="8" fill="#ffab91"/>
-  <g stroke="#ffcc80" stroke-width="6" stroke-linecap="round">
-    <line x1="262" y1="70" x2="280" y2="120"/>
-    <line x1="246" y1="74" x2="280" y2="120"/>
-  </g>
-  <circle cx="272" cy="128" r="8" fill="#ffb74d"/>
-  <path d="M50 136c14-10 30-10 44 0" stroke="#f5f5f5" stroke-width="2" opacity="0.6"/>
-  <path d="M140 136c14-10 30-10 44 0" stroke="#f5f5f5" stroke-width="2" opacity="0.6"/>
-  <path d="M230 136c14-10 30-10 44 0" stroke="#f5f5f5" stroke-width="2" opacity="0.6"/>
-  <text x="176" y="98" font-family="Arial" font-size="10" fill="#cfd8dc">Lantern glow</text>
-  <text x="248" y="150" font-family="Arial" font-size="10" fill="#cfd8dc">Dad rushing</text>
-</svg>`
+    text: `On the eve of the last day, we decided to paint. We turned on a lantern that looked like a glowing globe. Suddenly, we heard a loud sound. Thump, thump, thump! "Is it a stampede of horses?" asked Siena. No! It was just Dad running to tell us dinner was ready. "I made chicken!" Dad said. "How wonderful!" we all shouted.`,
+    image: {
+      src: "https://image.pollinations.ai/prompt/nighttime%20campground%20painting%20party%20with%20four%20kids%20around%20a%20wooden%20picnic%20table%20lit%20by%20a%20glowing%20globe%20lantern%2C%20each%20painting%20on%20canvases%2C%20dad%20running%20toward%20them%20in%20a%20funny%20way%2C%20starry%20sky%2C%20cozy%20children%27s%20story%20illustration%2C%20digital%20painting&width=900&height=700&format=jpeg",
+      alt: "At night four friends paint at a lantern-lit picnic table while Dad runs toward them, making the kids look up in surprise."
+    }
   },
   {
     title: "Time to Go Home",
-    text: "We cleaned up our paints. \"I love these paintings,\" said Mom. We were sad to leave because we had so much fun. We said goodbye to Pete the horse. \"I wonder how long until our next trip?\" asked Lev. \"Maybe once school is over,\" I said. Camping with friends is the best rule of all!",
-    image: `
-<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="sunset2" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop stop-color="#ffb74d" offset="0%"/>
-      <stop stop-color="#ffcc80" offset="40%"/>
-      <stop stop-color="#b3c2f2" offset="100%"/>
-    </linearGradient>
-  </defs>
-  <rect width="320" height="220" fill="url(#sunset2)"/>
-  <rect y="150" width="320" height="70" fill="#d7d8ef"/>
-  <rect x="40" y="114" width="200" height="46" rx="14" fill="#e3f2fd" stroke="#9fa8da" stroke-width="3"/>
-  <rect x="44" y="126" width="50" height="20" rx="6" fill="#b3e5fc"/>
-  <rect x="104" y="126" width="68" height="20" rx="6" fill="#b3e5fc"/>
-  <rect x="182" y="126" width="50" height="20" rx="6" fill="#b3e5fc"/>
-  <circle cx="86" cy="162" r="12" fill="#3949ab"/>
-  <circle cx="86" cy="162" r="5" fill="#b0bec5"/>
-  <circle cx="196" cy="162" r="12" fill="#3949ab"/>
-  <circle cx="196" cy="162" r="5" fill="#b0bec5"/>
-  <rect x="248" y="120" width="40" height="50" rx="8" fill="#bcaaa4"/>
-  <rect x="246" y="98" width="46" height="24" rx="8" fill="#8d6e63"/>
-  <text x="62" y="118" font-family="Arial" font-size="10" fill="#1b3c6b">RV friends</text>
-  <text x="252" y="134" font-family="Arial" font-size="10" fill="#4e342e">Pete</text>
-  <rect x="20" y="96" width="38" height="32" rx="6" fill="#ffb74d"/>
-  <text x="22" y="116" font-family="Arial" font-size="10" fill="#6d4c41">Mom</text>
-  <path d="M28 140c22-16 44-16 60 2" stroke="#6a1b9a" stroke-width="2" opacity="0.4"/>
-  <path d="M210 150c12-10 26-10 40 0" stroke="#6a1b9a" stroke-width="2" opacity="0.4"/>
-</svg>`
+    text: `The next day, it was time to head home. We packed up the RV and said goodbye to Pete. The sun looked like a glowing globe over the trees as we drove away. Mom took a picture of two of our paintings to remember the trip.`,
+    image: {
+      src: "https://image.pollinations.ai/prompt/RV%20driving%20away%20from%20a%20campground%20at%20sunset%2C%20kids%20waving%20from%20the%20back%20window%2C%20brown%20horse%20by%20a%20fence%20in%20the%20distance%2C%20mom%20holding%20two%20finished%20paintings%2C%20warm%20glow%2C%20storybook%20style%2C%20digital%20painting%2C%20vivid%20colors&width=900&height=700&format=jpeg",
+      alt: "The RV rolls down the road at sunset with kids waving from the back while Pete watches from the fence and Mom holds two paintings."
+    }
   },
   {
     title: "Spelling Star!",
-    text: "Can you read all the words from our story? High Frequency Words: how | once | because. Regular Words: eve | mute | rule | these | here | globe | broke | those | cute | Pete. Challenge Words: milestone | stampede | refuse. Try the quiz to become today's spelling star!",
-    image: `
-<svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg">
-  <rect width="320" height="220" fill="#0f172a"/>
-  <g stroke="#ffd54f" stroke-width="2" fill="none">
-    <circle cx="70" cy="70" r="16"/>
-    <circle cx="120" cy="120" r="12"/>
-    <circle cx="200" cy="70" r="18"/>
-    <circle cx="250" cy="140" r="14"/>
-  </g>
-  <g fill="#ffeb3b">
-    <circle cx="70" cy="70" r="6"/>
-    <circle cx="120" cy="120" r="5"/>
-    <circle cx="200" cy="70" r="7"/>
-    <circle cx="250" cy="140" r="5"/>
-  </g>
-  <rect x="70" y="150" width="180" height="46" rx="10" fill="#1e2a3f" stroke="#3f51b5" stroke-width="2"/>
-  <text x="88" y="176" font-family="Arial" font-size="12" fill="#e8eaf6">Spelling Star Challenge</text>
-  <text x="96" y="194" font-family="Arial" font-size="12" fill="#c5cae9">Fill the missing letters!</text>
-  <polygon points="40,40 48,60 30,50 50,50 32,60" fill="#ff8a65" opacity="0.8"/>
-  <polygon points="280,40 288,60 270,50 290,50 272,60" fill="#4dd0e1" opacity="0.8"/>
-</svg>`
+    text: `Can you read all the words from our story? High Frequency Words: how | once | because. Regular Words: eve | mute | rule | these | here | globe | broke | those | cute | Pete. Challenge Words: milestone | stampede | refuse. Try the quiz to become today's spelling star!`,
+    image: {
+      src: "https://image.pollinations.ai/prompt/colorful%20spelling%20star%20award%20page%20with%20ribbons%2C%20sparkles%2C%20and%20lists%20of%20words%2C%20small%20drawing%20of%20four%20friends%20hugging%20at%20the%20bottom%2C%20playful%20children%27s%20poster%20style%2C%20digital%20painting%2C%20high%20detail&width=900&height=700&format=jpeg",
+      alt: "A celebratory spelling star page with ribbons, stars, word lists, and a tiny drawing of four friends hugging."
+    }
   }
 ];
 
@@ -233,7 +90,13 @@ function renderPage() {
   pageNumberEl.textContent = currentPage + 1;
   pageTitleEl.textContent = page.title;
   pageTextEl.textContent = page.text;
-  pageImageEl.innerHTML = page.image;
+  pageImageEl.innerHTML = "";
+  const img = document.createElement("img");
+  img.src = page.image.src;
+  img.alt = page.image.alt;
+  img.loading = "lazy";
+  img.className = "page__img";
+  pageImageEl.appendChild(img);
   prevBtn.disabled = currentPage === 0;
   nextBtn.disabled = currentPage === pages.length - 1;
   quizSection.classList.toggle("highlight", currentPage === pages.length - 1);
