@@ -8,96 +8,55 @@
 </head>
 <body>
   <div class="backdrop"></div>
-  <header class="hero">
-    <div class="hero__text">
-      <p class="eyebrow">The Great RV Art Show</p>
-      <h1>Road-trip storybook with read-aloud and spelling fun</h1>
-      <p class="lede">Tap play to hear each page, flip through the trip, then try the spelling test at the end.</p>
-      <div class="hero__actions">
+  <main class="story">
+    <div class="page-meta">
+      <div>
+        <p class="eyebrow">Page <span id="page-number">1</span> of 6</p>
+        <h1 id="page-title">The Big Trip Begins</h1>
+      </div>
+      <div class="controls">
+        <button id="prev-btn" class="btn icon" aria-label="Previous page">←</button>
+        <button id="next-btn" class="btn icon" aria-label="Next page">→</button>
+      </div>
+    </div>
+
+    <div class="story-controls" aria-label="Playback controls">
+      <div class="story-controls__buttons">
         <button id="play-btn" class="btn primary">▶ Play page</button>
+        <button id="restart-btn" class="btn ghost">⟲ Restart book</button>
       </div>
-      <div class="hero__settings" aria-label="Playback settings">
-        <button id="settings-toggle" class="btn icon settings-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="settings-panel">
-          ⚙
-        </button>
-        <div id="settings-panel" class="settings-panel" hidden>
-          <div class="settings-panel__row">
-            <button id="restart-btn" class="btn ghost btn-small">⟲ Restart book</button>
-            <p class="small">Start the story from page one.</p>
-          </div>
-          <div class="speed-control">
-            <label for="speed-slider">Narration speed</label>
-            <div class="speed-control__row">
-              <input
-                id="speed-slider"
-                type="range"
-                min="0.7"
-                max="1.2"
-                step="0.05"
-                value="0.9"
-                aria-label="Narration speed"
-              />
-              <span id="speed-label" class="speed-control__badge">Gentle (0.9x)</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="hero__badge">
-      <span>6</span>
-      <p>Pages</p>
-      <p class="small">Voice ready</p>
-    </div>
-  </header>
-
-  <main class="layout">
-    <section class="story">
-      <div class="page-meta">
-        <div>
-          <p class="eyebrow">Page <span id="page-number">1</span> of 6</p>
-          <h2 id="page-title">The Big Trip Begins</h2>
-        </div>
-        <div class="controls">
-          <button id="prev-btn" class="btn icon" aria-label="Previous page">←</button>
-          <button id="next-btn" class="btn icon" aria-label="Next page">→</button>
-        </div>
-      </div>
-      <div class="page">
-        <div class="page__image" id="page-image" aria-hidden="true">
-          <img
-            class="page__img"
-            src="https://image.pollinations.ai/prompt/cheerful%20illustration%20of%20a%20family%20and%20four%20kids%20packing%20an%20RV%20in%20a%20driveway%2C%20bright%20day%2C%20kid%20holding%20painting%20canvases%2C%20whimsical%20story%20book%20style%2C%20warm%20colors%2C%20digital%20painting%2C%20kids%20book%20art&width=900&height=700&format=jpeg"
-            alt="A colorful driveway scene with a big RV and four kids helping parents pack, one holding painting canvases."
-            loading="lazy"
+      <div class="speed-control">
+        <label for="speed-slider">Narration speed</label>
+        <div class="speed-control__row">
+          <input
+            id="speed-slider"
+            type="range"
+            min="0.7"
+            max="1.2"
+            step="0.05"
+            value="0.9"
+            aria-label="Narration speed"
           />
+          <span id="speed-label" class="speed-control__badge">Gentle (0.9x)</span>
         </div>
-        <p id="page-text" class="page__text">
-          How do we fit everything in the RV? It is always a puzzle! We go on a big trip once a summer, and today is the day. I
-          am so excited because my best friends, Siena, Lev, and Samuel, are coming too. "Put these bags over there," said Dad.
-          "And put the painting supplies here on the table." We are all happy because we are going to the campground with the
-          big pool!
-        </p>
       </div>
-    </section>
+      <p id="voice-status" aria-live="polite" class="voice-status">Google Cloud narration preferred when server is running; will fall back to your device voice if unavailable.</p>
+    </div>
 
-    <section class="quiz" id="quiz-section">
-      <div class="quiz__header">
-        <h3>Spelling Star</h3>
-        <p>Fill in the missing letters, then check your answers.</p>
+    <div class="page">
+      <div class="page__image" id="page-image" aria-hidden="true">
+        <img
+          class="page__img"
+          src="https://image.pollinations.ai/prompt/cheerful%20illustration%20of%20a%20family%20and%20four%20kids%20packing%20an%20RV%20in%20a%20driveway%2C%20bright%20day%2C%20kid%20holding%20painting%20canvases%2C%20whimsical%20story%20book%20style%2C%20warm%20colors%2C%20digital%20painting%2C%20kids%20book%20art&width=900&height=700&format=jpeg"
+          alt="A colorful driveway scene with a big RV and four kids helping parents pack, one holding painting canvases."
+          loading="lazy"
+        />
       </div>
-      <div id="quiz-list" class="quiz__list"></div>
-      <div class="quiz__actions">
-        <button id="check-answers" class="btn primary">Check answers</button>
-        <button id="retry-quiz" class="btn ghost">New set</button>
-      </div>
-      <p id="quiz-feedback" class="quiz__feedback" aria-live="polite"></p>
-    </section>
+      <p id="page-text" class="page__text">
+        How do we fit everything in the RV? It is always a puzzle! We go on a big trip once a summer, and today is the day. I am so excited because my best friends, Siena, Lev, and Samuel, are coming too. "Put these bags over there," said Dad. "And put the painting supplies here on the table." We are all happy because we are going to the campground with the big pool!
+      </p>
+    </div>
   </main>
-
-  <footer class="footer">
-    <p id="voice-status" aria-live="polite">Google Cloud narration preferred when server is running; will fall back to your device voice if unavailable.</p>
-    <p class="small">Set a <code>GOOGLE_TTS_API_KEY</code> environment variable and run <code>npm start</code> to enable the cloud narrator. Without it, your browser's built-in voice is used.</p>
-  </footer>
 
   <script src="script.js"></script>
 </body>

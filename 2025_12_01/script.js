@@ -49,25 +49,6 @@ const pages = [
   }
 ];
 
-function shuffle(array) {
-  return array
-    .map((value) => ({ value, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(({ value }) => value);
-}
-
-function wordsFromPage(text) {
-  const matches = text.match(/[A-Za-z]+/g) || [];
-  const unique = [...new Set(matches)];
-  return shuffle(unique).filter((word) => word.length >= 3);
-}
-
-function buildPrompt(word) {
-  if (word.length < 3) return word;
-  const missingIndex = Math.floor(Math.random() * (word.length - 2)) + 1;
-  return `${word.slice(0, missingIndex)}_${word.slice(missingIndex + 1)}`;
-}
-
 const pageNumberEl = document.getElementById("page-number");
 const pageTitleEl = document.getElementById("page-title");
 const pageTextEl = document.getElementById("page-text");
@@ -79,13 +60,6 @@ const restartBtn = document.getElementById("restart-btn");
 const voiceStatusEl = document.getElementById("voice-status");
 const speedSlider = document.getElementById("speed-slider");
 const speedLabel = document.getElementById("speed-label");
-const settingsToggle = document.getElementById("settings-toggle");
-const settingsPanel = document.getElementById("settings-panel");
-const quizListEl = document.getElementById("quiz-list");
-const checkAnswersBtn = document.getElementById("check-answers");
-const retryQuizBtn = document.getElementById("retry-quiz");
-const quizFeedbackEl = document.getElementById("quiz-feedback");
-const quizSection = document.getElementById("quiz-section");
 
 let currentPage = 0;
 let currentUtterance = null;
@@ -96,7 +70,6 @@ let wordBoundaries = [];
 let highlightInterval = null;
 let lastHighlightedIndex = -1;
 let narrationStoppedManually = false;
-const spellingWords = new Set(quizBank.map((item) => item.answer.toLowerCase()));
 
 function setPageText(text) {
   const words = text.split(/(\s+)/);
@@ -112,10 +85,6 @@ function setPageText(text) {
     }
     const span = document.createElement("span");
     span.className = "page__word";
-    const normalized = segment.toLowerCase().replace(/[^a-z]/gi, "");
-    if (normalized && spellingWords.has(normalized)) {
-      span.classList.add("page__word--spelling");
-    }
     span.textContent = segment;
     span.dataset.index = wordSpans.length;
     wordSpans.push(span);
@@ -208,7 +177,6 @@ function renderPage() {
   pageImageEl.appendChild(img);
   prevBtn.disabled = currentPage === 0;
   nextBtn.disabled = currentPage === pages.length - 1;
-  quizSection.classList.toggle("highlight", currentPage === pages.length - 1);
 }
 
 function updateVoiceStatus(message, tone = "muted") {
@@ -323,7 +291,6 @@ function goToPage(index) {
   stopAllAudio();
   currentPage = index;
   renderPage();
-  buildQuiz();
 }
 
 function nextPage() {
@@ -339,69 +306,13 @@ function restartBook() {
   speak(pages[currentPage].text);
 }
 
-function sampleQuizItemsFromText(text, count = 6) {
-  const words = wordsFromPage(text);
-  return words.slice(0, count).map((word) => ({ prompt: buildPrompt(word), answer: word }));
-}
-
-function buildQuiz() {
-  quizListEl.innerHTML = "";
-  const items = sampleQuizItemsFromText(pages[currentPage].text);
-  if (!items.length) {
-    quizFeedbackEl.textContent = "No words on this page to practice yet.";
-    return;
-  }
-  items.forEach((item, idx) => {
-    const row = document.createElement("div");
-    row.className = "quiz__item";
-
-    const label = document.createElement("div");
-    label.className = "quiz__label";
-    label.textContent = `${idx + 1}. ${item.prompt}`;
-
-    const input = document.createElement("input");
-    input.type = "text";
-    input.maxLength = item.answer.length;
-    input.dataset.answer = item.answer.toLowerCase();
-    input.className = "quiz__input";
-    input.autocomplete = "off";
-
-    row.appendChild(label);
-    row.appendChild(input);
-    quizListEl.appendChild(row);
-  });
-  quizFeedbackEl.textContent = "";
-}
-
-function checkAnswers() {
-  const inputs = quizListEl.querySelectorAll("input");
-  let correct = 0;
-  inputs.forEach((input) => {
-    const expected = input.dataset.answer;
-    const guess = input.value.trim().toLowerCase();
-    const isCorrect = guess === expected;
-    input.classList.toggle("correct", isCorrect);
-    input.classList.toggle("incorrect", !isCorrect);
-    if (isCorrect) correct += 1;
-  });
-  quizFeedbackEl.textContent = `You got ${correct}/${inputs.length} right${correct === inputs.length ? "! ✨" : ". Keep going!"}`;
-}
-
 prevBtn.addEventListener("click", prevPage);
 nextBtn.addEventListener("click", nextPage);
 playBtn.addEventListener("click", () => speak(pages[currentPage].text));
 restartBtn.addEventListener("click", restartBook);
-checkAnswersBtn.addEventListener("click", checkAnswers);
-retryQuizBtn.addEventListener("click", buildQuiz);
 speedSlider?.addEventListener("input", () => {
   updateSpeedLabel();
   stopAllAudio();
-});
-settingsToggle?.addEventListener("click", () => {
-  if (!settingsPanel) return;
-  const isOpen = settingsPanel.hasAttribute("hidden") === false;
-  settingsToggle.setAttribute("aria-expanded", String(!isOpen));
-  settingsPanel.toggleAttribute("hidden", isOpen);
 });
 
 updateVoiceStatus(
@@ -412,7 +323,6 @@ updateVoiceStatus(
 function initializeStorybook() {
   try {
     renderPage();
-    buildQuiz();
     updateSpeedLabel();
   } catch (error) {
     console.error(error);
