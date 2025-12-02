@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Great RV Art Show</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="backdrop"></div>
+  <header class="hero">
+    <div class="hero__text">
+      <p class="eyebrow">The Great RV Art Show</p>
+      <h1>Road-trip storybook with read-aloud and spelling fun</h1>
+      <p class="lede">Tap play to hear each page, flip through the trip, then try the spelling test at the end.</p>
+      <div class="hero__actions">
+        <button id="play-btn" class="btn primary">▶ Play page</button>
+        <button id="restart-btn" class="btn ghost">⟲ Restart book</button>
+      </div>
+    </div>
+    <div class="hero__badge">
+      <span>6</span>
+      <p>Pages</p>
+      <p class="small">Voice ready</p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="story">
+      <div class="page-meta">
+        <div>
+          <p class="eyebrow">Page <span id="page-number">1</span> of 6</p>
+          <h2 id="page-title">The Big Trip Begins</h2>
+        </div>
+        <div class="controls">
+          <button id="prev-btn" class="btn icon" aria-label="Previous page">←</button>
+          <button id="next-btn" class="btn icon" aria-label="Next page">→</button>
+        </div>
+      </div>
+      <div class="page">
+        <div class="page__image" id="page-image" aria-hidden="true"></div>
+        <p id="page-text" class="page__text"></p>
+      </div>
+    </section>
+
+    <section class="quiz" id="quiz-section">
+      <div class="quiz__header">
+        <h3>Spelling Star</h3>
+        <p>Fill in the missing letters, then check your answers.</p>
+      </div>
+      <div id="quiz-list" class="quiz__list"></div>
+      <div class="quiz__actions">
+        <button id="check-answers" class="btn primary">Check answers</button>
+        <button id="retry-quiz" class="btn ghost">New set</button>
+      </div>
+      <p id="quiz-feedback" class="quiz__feedback" aria-live="polite"></p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>Voice narration uses your browser's built-in reader. If you don't hear audio, make sure your device volume is up and tap play again.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
