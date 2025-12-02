@@ -199,6 +199,112 @@ h1 {
   font-size: 16px;
 }
 
+.spell-test {
+  grid-column: 1 / -1;
+  display: none;
+  gap: 14px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border);
+  border-radius: 12px;
+}
+
+.spell-test__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.spell-test__title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: #fefefe;
+}
+
+.spell-test__subtitle {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.spell-test__actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.spell-test__score {
+  font-weight: 700;
+  color: var(--accent-2);
+  min-width: 90px;
+}
+
+.spell-list {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.spell-item {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 6px;
+}
+
+.spell-item__prompt {
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fdf6ec;
+}
+
+.spell-item__prompt code {
+  background: rgba(239, 131, 84, 0.16);
+  border: 1px solid rgba(239, 131, 84, 0.5);
+  border-radius: 6px;
+  padding: 2px 6px;
+}
+
+.spell-item__input {
+  display: grid;
+  grid-template-columns: auto 60px auto;
+  align-items: center;
+  gap: 6px;
+  color: var(--text);
+}
+
+.spell-item__input input {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  text-transform: lowercase;
+  font-weight: 800;
+  text-align: center;
+}
+
+.spell-item__feedback {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.spell-item[data-state="correct"] {
+  border-color: rgba(96, 210, 197, 0.7);
+  box-shadow: 0 0 0 1px rgba(96, 210, 197, 0.3);
+}
+
+.spell-item[data-state="incorrect"] {
+  border-color: rgba(239, 131, 84, 0.7);
+  box-shadow: 0 0 0 1px rgba(239, 131, 84, 0.2);
+}
+
 .page__word {
   display: inline-block;
   padding: 2px 4px;
@@ -233,6 +339,23 @@ h1 {
   border: 1px dashed var(--border);
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.02);
+}
+
+.spell-test-active .page {
+  grid-template-columns: 1fr;
+}
+
+.spell-test-active .page__image,
+.spell-test-active .page__content,
+.spell-test-active .page-meta,
+.spell-test-active #play-btn,
+.spell-test-active .controls,
+.spell-test-active .speed-control {
+  display: none;
+}
+
+.spell-test-active #spell-test {
+  display: grid;
 }
 
 .controls {

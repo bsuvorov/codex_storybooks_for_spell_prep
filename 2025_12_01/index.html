@@ -28,8 +28,21 @@
           How do we fit everything in the RV? It is always a puzzle! We go on a big trip once a summer, and today is the day. I am so excited because my best friends, Siena, Lev, and Samuel, are coming too. "Put these bags over there," said Dad. "And put the painting supplies here on the table." We are all happy because we are going to the campground with the big pool!
         </p>
       </div>
+      <div class="spell-test" id="spell-test" hidden>
+        <div class="spell-test__header">
+          <p class="eyebrow">Spell Test</p>
+          <div>
+            <p class="spell-test__title">Fill in the missing letters</p>
+            <p class="spell-test__subtitle">Type just one or two letters to finish each word from the story.</p>
+          </div>
+          <div class="spell-test__actions">
+            <button id="check-spell-btn" class="btn primary">Check answers</button>
+            <span id="spell-score" class="spell-test__score" aria-live="polite"></span>
+          </div>
+        </div>
+        <div id="spell-list" class="spell-list" aria-live="polite"></div>
+      </div>
       <div class="page__actions">
-        <button id="restart-btn" class="btn ghost">⟲ Restart book</button>
         <div class="speed-control">
           <label for="speed-slider">Narration speed</label>
           <div class="speed-control__row">
@@ -45,6 +58,8 @@
             <span id="speed-label" class="speed-control__badge">Gentle (0.9x)</span>
           </div>
         </div>
+        <button id="spell-test-btn" class="btn ghost">✎ Spell test</button>
+        <button id="restart-btn" class="btn ghost">⟲ Restart book</button>
         <button id="play-btn" class="btn primary">▶ Play page</button>
         <div class="controls">
           <button id="prev-btn" class="btn icon" aria-label="Previous page">←</button>

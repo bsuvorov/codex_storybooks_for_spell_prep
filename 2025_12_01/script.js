@@ -53,6 +53,7 @@ const pageNumberEl = document.getElementById("page-number");
 const pageTitleEl = document.getElementById("page-title");
 const pageTextEl = document.getElementById("page-text");
 const pageImageEl = document.getElementById("page-image");
+const storyEl = document.querySelector(".story");
 const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const playBtn = document.getElementById("play-btn");
@@ -60,6 +61,11 @@ const restartBtn = document.getElementById("restart-btn");
 const voiceStatusEl = document.getElementById("voice-status");
 const speedSlider = document.getElementById("speed-slider");
 const speedLabel = document.getElementById("speed-label");
+const spellTestBtn = document.getElementById("spell-test-btn");
+const spellTestEl = document.getElementById("spell-test");
+const spellListEl = document.getElementById("spell-list");
+const spellScoreEl = document.getElementById("spell-score");
+const checkSpellBtn = document.getElementById("check-spell-btn");
 
 let currentPage = 0;
 let currentUtterance = null;
@@ -70,6 +76,7 @@ let wordBoundaries = [];
 let highlightInterval = null;
 let lastHighlightedIndex = -1;
 let narrationStoppedManually = false;
+let spellTestActive = false;
 const spellingWords = new Set([
   "how",
   "once",
@@ -88,6 +95,24 @@ const spellingWords = new Set([
   "stampede",
   "refuse",
 ]);
+const spellingTestItems = [
+  { word: "how", missing: "o", prefix: "h", suffix: "w" },
+  { word: "once", missing: "n", prefix: "o", suffix: "ce" },
+  { word: "because", missing: "us", prefix: "beca", suffix: "e" },
+  { word: "eve", missing: "v", prefix: "e", suffix: "e" },
+  { word: "mute", missing: "u", prefix: "m", suffix: "te" },
+  { word: "rule", missing: "u", prefix: "r", suffix: "le" },
+  { word: "these", missing: "e", prefix: "thes", suffix: "" },
+  { word: "here", missing: "r", prefix: "he", suffix: "e" },
+  { word: "globe", missing: "b", prefix: "glo", suffix: "e" },
+  { word: "broke", missing: "r", prefix: "b", suffix: "oke" },
+  { word: "those", missing: "s", prefix: "tho", suffix: "e" },
+  { word: "cute", missing: "u", prefix: "c", suffix: "te" },
+  { word: "pete", missing: "t", prefix: "pe", suffix: "e" },
+  { word: "milestone", missing: "st", prefix: "mile", suffix: "one" },
+  { word: "stampede", missing: "mp", prefix: "sta", suffix: "ede" },
+  { word: "refuse", missing: "fu", prefix: "re", suffix: "se" },
+];
 
 function normalizeWordForSpellCheck(word) {
   return word.toLowerCase().replace(/[^a-z]/g, "");
@@ -212,6 +237,7 @@ function updateVoiceStatus(message, tone = "muted") {
 }
 
 function stopAllAudio(markManual = true) {
+  if (spellTestActive) narrationStoppedManually = true;
   if (markManual) narrationStoppedManually = true;
   stopHighlighting();
   if (currentAudio) {
@@ -313,6 +339,7 @@ async function speak(text) {
 }
 
 function goToPage(index) {
+  if (spellTestActive) return;
   if (index < 0 || index >= pages.length) return;
   stopAllAudio();
   currentPage = index;
@@ -328,13 +355,19 @@ function prevPage() {
 }
 
 function restartBook() {
+  if (spellTestActive) {
+    exitSpellTest();
+  }
   goToPage(0);
   speak(pages[currentPage].text);
 }
 
 prevBtn.addEventListener("click", prevPage);
 nextBtn.addEventListener("click", nextPage);
-playBtn.addEventListener("click", () => speak(pages[currentPage].text));
+playBtn.addEventListener("click", () => {
+  if (spellTestActive) return;
+  speak(pages[currentPage].text);
+});
 restartBtn.addEventListener("click", restartBook);
 speedSlider?.addEventListener("input", () => {
   updateSpeedLabel();
@@ -346,10 +379,120 @@ updateVoiceStatus(
   "muted"
 );
 
+function resetSpellTest() {
+  if (!spellListEl) return;
+  spellListEl.querySelectorAll("input").forEach((input) => {
+    input.value = "";
+  });
+  spellListEl.querySelectorAll(".spell-item").forEach((item) => {
+    item.dataset.state = "";
+    const feedback = item.querySelector(".spell-item__feedback");
+    if (feedback) feedback.textContent = " ";
+  });
+  if (spellScoreEl) spellScoreEl.textContent = "";
+}
+
+function renderSpellTestList() {
+  if (!spellListEl) return;
+  const fragment = document.createDocumentFragment();
+  spellingTestItems.forEach(({ word, missing, prefix, suffix }) => {
+    const item = document.createElement("div");
+    item.className = "spell-item";
+    item.dataset.word = word;
+
+    const prompt = document.createElement("div");
+    prompt.className = "spell-item__prompt";
+    const mask = `${prefix}${"_".repeat(missing.length)}${suffix}`;
+    prompt.innerHTML = `Complete: <code>${mask}</code>`;
+    item.appendChild(prompt);
+
+    const inputRow = document.createElement("div");
+    inputRow.className = "spell-item__input";
+
+    const before = document.createElement("span");
+    before.textContent = prefix;
+    const input = document.createElement("input");
+    input.maxLength = missing.length;
+    input.dataset.answer = missing.toLowerCase();
+    input.dataset.word = word;
+    input.placeholder = "_".repeat(missing.length);
+    input.setAttribute("aria-label", `Fill the missing letters for ${word}`);
+    input.addEventListener("input", () => {
+      input.value = input.value.toLowerCase().replace(/[^a-z]/g, "");
+    });
+    const after = document.createElement("span");
+    after.textContent = suffix || " ";
+
+    inputRow.appendChild(before);
+    inputRow.appendChild(input);
+    inputRow.appendChild(after);
+    item.appendChild(inputRow);
+
+    const feedback = document.createElement("div");
+    feedback.className = "spell-item__feedback";
+    feedback.textContent = " ";
+    item.appendChild(feedback);
+
+    fragment.appendChild(item);
+  });
+
+  spellListEl.innerHTML = "";
+  spellListEl.appendChild(fragment);
+}
+
+function checkSpellTestAnswers() {
+  if (!spellListEl) return;
+  const items = spellListEl.querySelectorAll(".spell-item");
+  let correct = 0;
+  items.forEach((item) => {
+    const input = item.querySelector("input");
+    const feedback = item.querySelector(".spell-item__feedback");
+    const expected = (input?.dataset.answer || "").trim().toLowerCase();
+    const value = (input?.value || "").trim().toLowerCase();
+    const isCorrect = value === expected;
+    item.dataset.state = isCorrect ? "correct" : "incorrect";
+    if (feedback) feedback.textContent = isCorrect ? "Nice work!" : `Need: ${expected}`;
+    if (isCorrect) correct += 1;
+  });
+  if (spellScoreEl) {
+    spellScoreEl.textContent = `${correct}/${items.length} correct`;
+  }
+}
+
+function enterSpellTest() {
+  if (!storyEl || !spellTestEl) return;
+  spellTestActive = true;
+  storyEl.classList.add("spell-test-active");
+  spellTestEl.hidden = false;
+  resetSpellTest();
+  stopAllAudio();
+  if (spellTestBtn) spellTestBtn.textContent = "← Back to story";
+}
+
+function exitSpellTest() {
+  if (!storyEl || !spellTestEl) return;
+  spellTestActive = false;
+  storyEl.classList.remove("spell-test-active");
+  spellTestEl.hidden = true;
+  resetSpellTest();
+  if (spellTestBtn) spellTestBtn.textContent = "✎ Spell test";
+}
+
+spellTestBtn?.addEventListener("click", () => {
+  if (spellTestActive) {
+    exitSpellTest();
+    return;
+  }
+  enterSpellTest();
+});
+
+checkSpellBtn?.addEventListener("click", checkSpellTestAnswers);
+
 function initializeStorybook() {
   try {
     renderPage();
     updateSpeedLabel();
+    renderSpellTestList();
   } catch (error) {
     console.error(error);
     updateVoiceStatus("Could not load the story content. Please refresh to try again.", "warning");
