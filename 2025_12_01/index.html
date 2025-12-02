@@ -10,37 +10,7 @@
   <div class="backdrop"></div>
   <main class="story">
     <div class="page-meta">
-      <div>
-        <p class="eyebrow">Page <span id="page-number">1</span> of 6</p>
-        <h1 id="page-title">The Big Trip Begins</h1>
-      </div>
-      <div class="controls">
-        <button id="prev-btn" class="btn icon" aria-label="Previous page">←</button>
-        <button id="next-btn" class="btn icon" aria-label="Next page">→</button>
-      </div>
-    </div>
-
-    <div class="story-controls" aria-label="Playback controls">
-      <div class="story-controls__buttons">
-        <button id="play-btn" class="btn primary">▶ Play page</button>
-        <button id="restart-btn" class="btn ghost">⟲ Restart book</button>
-      </div>
-      <div class="speed-control">
-        <label for="speed-slider">Narration speed</label>
-        <div class="speed-control__row">
-          <input
-            id="speed-slider"
-            type="range"
-            min="0.7"
-            max="1.2"
-            step="0.05"
-            value="0.9"
-            aria-label="Narration speed"
-          />
-          <span id="speed-label" class="speed-control__badge">Gentle (0.9x)</span>
-        </div>
-      </div>
-      <p id="voice-status" aria-live="polite" class="voice-status">Google Cloud narration preferred when server is running; will fall back to your device voice if unavailable.</p>
+      <p class="eyebrow">Page <span id="page-number">1</span> of 6</p>
     </div>
 
     <div class="page">
@@ -52,10 +22,38 @@
           loading="lazy"
         />
       </div>
-      <p id="page-text" class="page__text">
-        How do we fit everything in the RV? It is always a puzzle! We go on a big trip once a summer, and today is the day. I am so excited because my best friends, Siena, Lev, and Samuel, are coming too. "Put these bags over there," said Dad. "And put the painting supplies here on the table." We are all happy because we are going to the campground with the big pool!
-      </p>
+      <div class="page__content">
+        <h1 id="page-title">The Big Trip Begins</h1>
+        <p id="page-text" class="page__text">
+          How do we fit everything in the RV? It is always a puzzle! We go on a big trip once a summer, and today is the day. I am so excited because my best friends, Siena, Lev, and Samuel, are coming too. "Put these bags over there," said Dad. "And put the painting supplies here on the table." We are all happy because we are going to the campground with the big pool!
+        </p>
+      </div>
+      <div class="page__actions">
+        <button id="restart-btn" class="btn ghost">⟲ Restart book</button>
+        <div class="speed-control">
+          <label for="speed-slider">Narration speed</label>
+          <div class="speed-control__row">
+            <input
+              id="speed-slider"
+              type="range"
+              min="0.7"
+              max="1.2"
+              step="0.05"
+              value="0.9"
+              aria-label="Narration speed"
+            />
+            <span id="speed-label" class="speed-control__badge">Gentle (0.9x)</span>
+          </div>
+        </div>
+        <button id="play-btn" class="btn primary">▶ Play page</button>
+        <div class="controls">
+          <button id="prev-btn" class="btn icon" aria-label="Previous page">←</button>
+          <button id="next-btn" class="btn icon" aria-label="Next page">→</button>
+        </div>
+      </div>
     </div>
+
+    <p id="voice-status" aria-live="polite" class="voice-status">Google Cloud narration preferred when server is running; will fall back to your device voice if unavailable.</p>
   </main>
 
   <script src="script.js"></script>

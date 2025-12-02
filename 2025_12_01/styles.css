@@ -78,8 +78,10 @@ h1 {
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 16px;
-  display: grid;
+  display: flex;
+  align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
   box-shadow: var(--shadow);
 }
 
@@ -90,38 +92,44 @@ h1 {
 }
 
 .speed-control {
-  padding: 10px 12px;
+  padding: 8px 10px;
   background: rgba(255, 255, 255, 0.04);
   border: 1px dashed var(--border);
-  border-radius: 12px;
-  display: grid;
-  gap: 6px;
-  width: 100%;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 0 1 320px;
 }
 
 .speed-control label {
   font-weight: 700;
   color: var(--text);
+  font-size: 13px;
+  white-space: nowrap;
 }
 
 .speed-control__row {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  flex: 1;
 }
 
 .speed-control input[type="range"] {
   flex: 1;
   accent-color: var(--accent);
+  min-width: 140px;
+  max-width: 200px;
 }
 
 .speed-control__badge {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 10px;
-  padding: 6px 10px;
+  padding: 4px 8px;
   font-weight: 700;
-  font-size: 13px;
+  font-size: 12px;
   white-space: nowrap;
 }
 
@@ -133,6 +141,7 @@ h1 {
   background: rgba(255, 255, 255, 0.02);
   color: var(--text);
   font-size: 14px;
+  flex: 1 1 100%;
 }
 
 .voice-status[data-tone="success"] {
@@ -154,8 +163,14 @@ h1 {
   padding: 16px;
   display: grid;
   grid-template-columns: 1.1fr 1fr;
+  grid-template-rows: auto auto;
   gap: 16px;
   align-items: center;
+}
+
+.page__content {
+  display: grid;
+  gap: 10px;
 }
 
 .page__image {
@@ -195,6 +210,19 @@ h1 {
   background: rgba(239, 131, 84, 0.22);
   color: #fff6e9;
   box-shadow: 0 0 0 1px rgba(239, 131, 84, 0.35);
+}
+
+.page__actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 10px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.02);
 }
 
 .controls {
@@ -245,6 +273,14 @@ h1 {
   .page {
     grid-template-columns: 1fr;
   }
+
+  .page__content {
+    order: 2;
+  }
+
+  .page__image {
+    order: 1;
+  }
 }
 
 @media (max-width: 600px) {
@@ -259,5 +295,15 @@ h1 {
 
   .controls {
     align-self: flex-end;
+  }
+
+  .page__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page__actions .controls {
+    align-self: stretch;
+    justify-content: space-between;
   }
 }
