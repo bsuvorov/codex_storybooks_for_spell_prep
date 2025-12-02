@@ -206,10 +206,20 @@ h1 {
   transition: background-color 0.18s ease, color 0.18s ease;
 }
 
+.page__word--spelling {
+  background: rgba(96, 210, 197, 0.16);
+  box-shadow: inset 0 0 0 1px rgba(96, 210, 197, 0.5);
+}
+
 .page__word--active {
   background: rgba(239, 131, 84, 0.22);
   color: #fff6e9;
   box-shadow: 0 0 0 1px rgba(239, 131, 84, 0.35);
+}
+
+.page__word--spelling.page__word--active {
+  background: rgba(239, 131, 84, 0.3);
+  box-shadow: 0 0 0 1px rgba(239, 131, 84, 0.5), inset 0 0 0 1px rgba(96, 210, 197, 0.6);
 }
 
 .page__actions {

@@ -70,6 +70,28 @@ let wordBoundaries = [];
 let highlightInterval = null;
 let lastHighlightedIndex = -1;
 let narrationStoppedManually = false;
+const spellingWords = new Set([
+  "how",
+  "once",
+  "because",
+  "eve",
+  "mute",
+  "rule",
+  "these",
+  "here",
+  "globe",
+  "broke",
+  "those",
+  "cute",
+  "pete",
+  "milestone",
+  "stampede",
+  "refuse",
+]);
+
+function normalizeWordForSpellCheck(word) {
+  return word.toLowerCase().replace(/[^a-z]/g, "");
+}
 
 function setPageText(text) {
   const words = text.split(/(\s+)/);
@@ -87,6 +109,10 @@ function setPageText(text) {
     span.className = "page__word";
     span.textContent = segment;
     span.dataset.index = wordSpans.length;
+    const normalized = normalizeWordForSpellCheck(segment);
+    if (normalized && spellingWords.has(normalized)) {
+      span.classList.add("page__word--spelling");
+    }
     wordSpans.push(span);
     boundaries.push({
       start: charCursor,
