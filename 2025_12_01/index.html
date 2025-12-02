@@ -58,7 +58,8 @@
   </main>
 
   <footer class="footer">
-    <p>Voice narration uses your browser's built-in reader. If you don't hear audio, make sure your device volume is up and tap play again.</p>
+    <p id="voice-status" aria-live="polite">Google Cloud narration preferred when server is running; will fall back to your device voice if unavailable.</p>
+    <p class="small">Set a <code>GOOGLE_TTS_API_KEY</code> environment variable and run <code>npm start</code> to enable the cloud narrator. Without it, your browser's built-in voice is used.</p>
   </footer>
 
   <script src="script.js"></script>

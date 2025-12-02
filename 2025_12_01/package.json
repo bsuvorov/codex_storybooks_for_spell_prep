@@ -1,0 +1,12 @@
+{
+  "name": "codex-storybooks-spell-prep",
+  "version": "1.0.0",
+  "description": "Storybook with optional Google Cloud Text-to-Speech narration",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
