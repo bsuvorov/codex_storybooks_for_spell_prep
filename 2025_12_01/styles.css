@@ -288,6 +288,27 @@ h3 {
   font-size: 14px;
 }
 
+#voice-status {
+  margin-bottom: 6px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px dashed var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--text);
+}
+
+#voice-status[data-tone="success"] {
+  border-color: rgba(96, 210, 197, 0.7);
+  box-shadow: 0 6px 24px rgba(96, 210, 197, 0.2);
+  color: #b7fff3;
+}
+
+#voice-status[data-tone="warning"] {
+  border-color: rgba(239, 131, 84, 0.7);
+  box-shadow: 0 6px 24px rgba(239, 131, 84, 0.2);
+  color: #ffd6c5;
+}
+
 @media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;

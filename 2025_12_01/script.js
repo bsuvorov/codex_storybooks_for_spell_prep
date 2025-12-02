@@ -76,6 +76,7 @@ const prevBtn = document.getElementById("prev-btn");
 const nextBtn = document.getElementById("next-btn");
 const playBtn = document.getElementById("play-btn");
 const restartBtn = document.getElementById("restart-btn");
+const voiceStatusEl = document.getElementById("voice-status");
 const quizListEl = document.getElementById("quiz-list");
 const checkAnswersBtn = document.getElementById("check-answers");
 const retryQuizBtn = document.getElementById("retry-quiz");
@@ -84,6 +85,8 @@ const quizSection = document.getElementById("quiz-section");
 
 let currentPage = 0;
 let currentUtterance = null;
+let currentAudio = null;
+const audioCache = new Map();
 
 function renderPage() {
   const page = pages[currentPage];
@@ -102,24 +105,85 @@ function renderPage() {
   quizSection.classList.toggle("highlight", currentPage === pages.length - 1);
 }
 
-function speak(text) {
+function updateVoiceStatus(message, tone = "muted") {
+  if (!voiceStatusEl) return;
+  voiceStatusEl.textContent = message;
+  voiceStatusEl.dataset.tone = tone;
+}
+
+function stopAllAudio() {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.src = "";
+    currentAudio = null;
+  }
+  if ("speechSynthesis" in window) {
+    window.speechSynthesis.cancel();
+  }
+}
+
+async function synthesizeWithGcp(text) {
+  const response = await fetch("/api/tts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ text }),
+  });
+
+  if (!response.ok) {
+    const { error } = await response.json().catch(() => ({ error: "Unknown error" }));
+    throw new Error(error || "Unable to request narration.");
+  }
+
+  const blob = await response.blob();
+  return URL.createObjectURL(blob);
+}
+
+function speakWithBrowser(text) {
   if (!("speechSynthesis" in window)) {
-    quizFeedbackEl.textContent = "Speech not supported in this browser.";
+    updateVoiceStatus("Speech not supported in this browser.", "warning");
     return;
   }
-  window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = 0.98;
   utterance.pitch = 1;
   currentUtterance = utterance;
   window.speechSynthesis.speak(utterance);
+  updateVoiceStatus("Playing with your device voice.", "muted");
+}
+
+function playAudio(url) {
+  stopAllAudio();
+  currentAudio = new Audio(url);
+  currentAudio.play().catch(() => {
+    updateVoiceStatus("Could not start audio playback.", "warning");
+  });
+  updateVoiceStatus("Playing with Google Cloud narration.", "success");
+}
+
+async function speak(text) {
+  stopAllAudio();
+  const cacheKey = `${currentPage}:${text}`;
+
+  if (audioCache.has(cacheKey)) {
+    playAudio(audioCache.get(cacheKey));
+    return;
+  }
+
+  try {
+    const url = await synthesizeWithGcp(text);
+    audioCache.set(cacheKey, url);
+    playAudio(url);
+    return;
+  } catch (error) {
+    updateVoiceStatus(error.message, "warning");
+  }
+
+  speakWithBrowser(text);
 }
 
 function goToPage(index) {
   if (index < 0 || index >= pages.length) return;
-  if ("speechSynthesis" in window) {
-    window.speechSynthesis.cancel();
-  }
+  stopAllAudio();
   currentPage = index;
   renderPage();
 }
@@ -189,5 +253,9 @@ restartBtn.addEventListener("click", restartBook);
 checkAnswersBtn.addEventListener("click", checkAnswers);
 retryQuizBtn.addEventListener("click", buildQuiz);
 
+updateVoiceStatus(
+  "Google Cloud narration preferred when server is running; will fall back to your device voice if unavailable.",
+  "muted"
+);
 renderPage();
 buildQuiz();
