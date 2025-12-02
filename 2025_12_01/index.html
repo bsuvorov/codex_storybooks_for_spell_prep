@@ -15,23 +15,32 @@
       <p class="lede">Tap play to hear each page, flip through the trip, then try the spelling test at the end.</p>
       <div class="hero__actions">
         <button id="play-btn" class="btn primary">▶ Play page</button>
-        <button id="restart-btn" class="btn ghost">⟲ Restart book</button>
       </div>
-      <div class="speed-control">
-        <label for="speed-slider">Narration speed</label>
-        <div class="speed-control__row">
-          <input
-            id="speed-slider"
-            type="range"
-            min="0.7"
-            max="1.2"
-            step="0.05"
-            value="0.9"
-            aria-label="Narration speed"
-          />
-          <span id="speed-label" class="speed-control__badge">Gentle (0.9x)</span>
+      <div class="hero__settings" aria-label="Playback settings">
+        <button id="settings-toggle" class="btn icon settings-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="settings-panel">
+          ⚙
+        </button>
+        <div id="settings-panel" class="settings-panel" hidden>
+          <div class="settings-panel__row">
+            <button id="restart-btn" class="btn ghost btn-small">⟲ Restart book</button>
+            <p class="small">Start the story from page one.</p>
+          </div>
+          <div class="speed-control">
+            <label for="speed-slider">Narration speed</label>
+            <div class="speed-control__row">
+              <input
+                id="speed-slider"
+                type="range"
+                min="0.7"
+                max="1.2"
+                step="0.05"
+                value="0.9"
+                aria-label="Narration speed"
+              />
+              <span id="speed-label" class="speed-control__badge">Gentle (0.9x)</span>
+            </div>
+          </div>
         </div>
-        <p class="small">Slow it down for younger listeners or speed up if you like.</p>
       </div>
     </div>
     <div class="hero__badge">

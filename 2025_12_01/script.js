@@ -79,6 +79,8 @@ const restartBtn = document.getElementById("restart-btn");
 const voiceStatusEl = document.getElementById("voice-status");
 const speedSlider = document.getElementById("speed-slider");
 const speedLabel = document.getElementById("speed-label");
+const settingsToggle = document.getElementById("settings-toggle");
+const settingsPanel = document.getElementById("settings-panel");
 const quizListEl = document.getElementById("quiz-list");
 const checkAnswersBtn = document.getElementById("check-answers");
 const retryQuizBtn = document.getElementById("retry-quiz");
@@ -93,6 +95,7 @@ let wordSpans = [];
 let wordBoundaries = [];
 let highlightInterval = null;
 let lastHighlightedIndex = -1;
+let narrationStoppedManually = false;
 const spellingWords = new Set(quizBank.map((item) => item.answer.toLowerCase()));
 
 function setPageText(text) {
@@ -214,7 +217,8 @@ function updateVoiceStatus(message, tone = "muted") {
   voiceStatusEl.dataset.tone = tone;
 }
 
-function stopAllAudio() {
+function stopAllAudio(markManual = true) {
+  if (markManual) narrationStoppedManually = true;
   stopHighlighting();
   if (currentAudio) {
     currentAudio.pause();
@@ -223,6 +227,14 @@ function stopAllAudio() {
   }
   if ("speechSynthesis" in window) {
     window.speechSynthesis.cancel();
+  }
+}
+
+function handleNarrationEnd() {
+  stopHighlighting();
+  if (narrationStoppedManually) return;
+  if (currentPage < pages.length - 1) {
+    nextPage();
   }
 }
 
@@ -257,13 +269,14 @@ function speakWithBrowser(text) {
     const index = wordIndexFromChar(event.charIndex);
     if (index >= 0) highlightWord(index);
   };
-  utterance.onend = stopHighlighting;
+  utterance.onend = handleNarrationEnd;
+  narrationStoppedManually = false;
   window.speechSynthesis.speak(utterance);
   updateVoiceStatus("Playing with your device voice.", "muted");
 }
 
 function playAudio(url) {
-  stopAllAudio();
+  stopAllAudio(false);
   currentAudio = new Audio(url);
   currentAudio.addEventListener("loadedmetadata", () => {
     if (isFinite(currentAudio.duration) && currentAudio.duration > 0) {
@@ -276,7 +289,8 @@ function playAudio(url) {
       startTimedHighlight(estimatedDuration);
     }
   });
-  currentAudio.addEventListener("ended", stopHighlighting);
+  currentAudio.addEventListener("ended", handleNarrationEnd);
+  narrationStoppedManually = false;
   currentAudio.play().catch(() => {
     updateVoiceStatus("Could not start audio playback.", "warning");
   });
@@ -284,7 +298,7 @@ function playAudio(url) {
 }
 
 async function speak(text) {
-  stopAllAudio();
+  stopAllAudio(false);
   const cacheKey = `${currentPage}:${text}:${getNarrationRate()}`;
 
   if (audioCache.has(cacheKey)) {
@@ -382,6 +396,12 @@ retryQuizBtn.addEventListener("click", buildQuiz);
 speedSlider?.addEventListener("input", () => {
   updateSpeedLabel();
   stopAllAudio();
+});
+settingsToggle?.addEventListener("click", () => {
+  if (!settingsPanel) return;
+  const isOpen = settingsPanel.hasAttribute("hidden") === false;
+  settingsToggle.setAttribute("aria-expanded", String(!isOpen));
+  settingsPanel.toggleAttribute("hidden", isOpen);
 });
 
 updateVoiceStatus(
