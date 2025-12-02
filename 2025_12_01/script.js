@@ -250,14 +250,6 @@ function stopAllAudio(markManual = true) {
   }
 }
 
-function handleNarrationEnd() {
-  stopHighlighting();
-  if (narrationStoppedManually) return;
-  if (currentPage < pages.length - 1) {
-    nextPage();
-  }
-}
-
 async function synthesizeWithGcp(text) {
   const response = await fetch("/api/tts", {
     method: "POST",
@@ -338,12 +330,27 @@ async function speak(text) {
   speakWithBrowser(text);
 }
 
-function goToPage(index) {
+function goToPage(index, options = {}) {
+  const { markManualStop = true, autoPlay = false } = options;
   if (spellTestActive) return;
   if (index < 0 || index >= pages.length) return;
-  stopAllAudio();
+  stopAllAudio(markManualStop);
   currentPage = index;
   renderPage();
+  if (autoPlay) {
+    speak(pages[currentPage].text);
+  }
+}
+
+function handleNarrationEnd() {
+  stopHighlighting();
+  if (narrationStoppedManually) return;
+  const onLastPage = currentPage === pages.length - 1;
+  if (onLastPage) {
+    enterSpellTest();
+    return;
+  }
+  goToPage(currentPage + 1, { markManualStop: false, autoPlay: true });
 }
 
 function nextPage() {
