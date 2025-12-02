@@ -27,7 +27,12 @@ app.post('/api/tts', async (req, res) => {
     return res.status(400).json({ error: 'Text is required for synthesis.' });
   }
 
-  const cacheKey = `${GOOGLE_TTS_LANGUAGE_CODE}|${GOOGLE_TTS_VOICE}|${GOOGLE_TTS_AUDIO_ENCODING}|${GOOGLE_TTS_SPEAKING_RATE}|${GOOGLE_TTS_PITCH}|${text}`;
+  const requestedRate = Number(req.body?.speakingRate);
+  const speakingRate = Number.isFinite(requestedRate)
+    ? Math.min(Math.max(requestedRate, 0.5), 1.25)
+    : GOOGLE_TTS_SPEAKING_RATE;
+
+  const cacheKey = `${GOOGLE_TTS_LANGUAGE_CODE}|${GOOGLE_TTS_VOICE}|${GOOGLE_TTS_AUDIO_ENCODING}|${speakingRate}|${GOOGLE_TTS_PITCH}|${text}`;
   const cached = synthCache.get(cacheKey);
   if (cached) {
     res.set('Content-Type', cached.contentType);
@@ -42,7 +47,7 @@ app.post('/api/tts', async (req, res) => {
     },
     audioConfig: {
       audioEncoding: GOOGLE_TTS_AUDIO_ENCODING,
-      speakingRate: GOOGLE_TTS_SPEAKING_RATE,
+      speakingRate,
       pitch: GOOGLE_TTS_PITCH,
     },
   };

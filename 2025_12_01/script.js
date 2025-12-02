@@ -77,6 +77,8 @@ const nextBtn = document.getElementById("next-btn");
 const playBtn = document.getElementById("play-btn");
 const restartBtn = document.getElementById("restart-btn");
 const voiceStatusEl = document.getElementById("voice-status");
+const speedSlider = document.getElementById("speed-slider");
+const speedLabel = document.getElementById("speed-label");
 const quizListEl = document.getElementById("quiz-list");
 const checkAnswersBtn = document.getElementById("check-answers");
 const retryQuizBtn = document.getElementById("retry-quiz");
@@ -87,6 +89,26 @@ let currentPage = 0;
 let currentUtterance = null;
 let currentAudio = null;
 const audioCache = new Map();
+
+function getNarrationRate() {
+  const rate = Number(speedSlider?.value || 0.9);
+  if (Number.isNaN(rate)) return 0.9;
+  return Math.min(Math.max(rate, 0.7), 1.2);
+}
+
+function describeNarrationRate(rate) {
+  if (rate < 0.85) return "Gentle";
+  if (rate > 1.05) return "Snappy";
+  return "Just right";
+}
+
+function updateSpeedLabel() {
+  const rate = getNarrationRate();
+  const descriptor = describeNarrationRate(rate);
+  if (speedLabel) {
+    speedLabel.textContent = `${descriptor} (${rate.toFixed(2)}x)`;
+  }
+}
 
 function renderPage() {
   const page = pages[currentPage];
@@ -126,7 +148,7 @@ async function synthesizeWithGcp(text) {
   const response = await fetch("/api/tts", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
+    body: JSON.stringify({ text, speakingRate: getNarrationRate() }),
   });
 
   if (!response.ok) {
@@ -144,7 +166,7 @@ function speakWithBrowser(text) {
     return;
   }
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.98;
+  utterance.rate = getNarrationRate();
   utterance.pitch = 1;
   currentUtterance = utterance;
   window.speechSynthesis.speak(utterance);
@@ -162,7 +184,7 @@ function playAudio(url) {
 
 async function speak(text) {
   stopAllAudio();
-  const cacheKey = `${currentPage}:${text}`;
+  const cacheKey = `${currentPage}:${text}:${getNarrationRate()}`;
 
   if (audioCache.has(cacheKey)) {
     playAudio(audioCache.get(cacheKey));
@@ -252,6 +274,10 @@ playBtn.addEventListener("click", () => speak(pages[currentPage].text));
 restartBtn.addEventListener("click", restartBook);
 checkAnswersBtn.addEventListener("click", checkAnswers);
 retryQuizBtn.addEventListener("click", buildQuiz);
+speedSlider?.addEventListener("input", () => {
+  updateSpeedLabel();
+  stopAllAudio();
+});
 
 updateVoiceStatus(
   "Google Cloud narration preferred when server is running; will fall back to your device voice if unavailable.",
@@ -259,3 +285,4 @@ updateVoiceStatus(
 );
 renderPage();
 buildQuiz();
+updateSpeedLabel();
