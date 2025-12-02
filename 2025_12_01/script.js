@@ -388,6 +388,26 @@ updateVoiceStatus(
   "Google Cloud narration preferred when server is running; will fall back to your device voice if unavailable.",
   "muted"
 );
-renderPage();
-buildQuiz();
-updateSpeedLabel();
+
+function initializeStorybook() {
+  try {
+    renderPage();
+    buildQuiz();
+    updateSpeedLabel();
+  } catch (error) {
+    console.error(error);
+    updateVoiceStatus("Could not load the story content. Please refresh to try again.", "warning");
+    if (pageTextEl) {
+      pageTextEl.textContent = "We couldn't load the story text right now.";
+    }
+    if (pageImageEl) {
+      pageImageEl.innerHTML = "";
+    }
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initializeStorybook);
+} else {
+  initializeStorybook();
+}
