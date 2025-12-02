@@ -49,24 +49,24 @@ const pages = [
   }
 ];
 
-const quizBank = [
-  { prompt: "h_w", answer: "how" },
-  { prompt: "on_e", answer: "once" },
-  { prompt: "be_a_se", answer: "because" },
-  { prompt: "_ve", answer: "eve" },
-  { prompt: "m_te", answer: "mute" },
-  { prompt: "r_le", answer: "rule" },
-  { prompt: "th_se", answer: "these" },
-  { prompt: "h_re", answer: "here" },
-  { prompt: "gl_be", answer: "globe" },
-  { prompt: "br_ke", answer: "broke" },
-  { prompt: "tho_e", answer: "those" },
-  { prompt: "cu_e", answer: "cute" },
-  { prompt: "_ete", answer: "Pete" },
-  { prompt: "mile_t_ne", answer: "milestone" },
-  { prompt: "st_mpede", answer: "stampede" },
-  { prompt: "re_use", answer: "refuse" }
-];
+function shuffle(array) {
+  return array
+    .map((value) => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
+
+function wordsFromPage(text) {
+  const matches = text.match(/[A-Za-z]+/g) || [];
+  const unique = [...new Set(matches)];
+  return shuffle(unique).filter((word) => word.length >= 3);
+}
+
+function buildPrompt(word) {
+  if (word.length < 3) return word;
+  const missingIndex = Math.floor(Math.random() * (word.length - 2)) + 1;
+  return `${word.slice(0, missingIndex)}_${word.slice(missingIndex + 1)}`;
+}
 
 const pageNumberEl = document.getElementById("page-number");
 const pageTitleEl = document.getElementById("page-title");
@@ -309,6 +309,7 @@ function goToPage(index) {
   stopAllAudio();
   currentPage = index;
   renderPage();
+  buildQuiz();
 }
 
 function nextPage() {
@@ -320,19 +321,22 @@ function prevPage() {
 }
 
 function restartBook() {
-  currentPage = 0;
-  renderPage();
+  goToPage(0);
   speak(pages[currentPage].text);
 }
 
-function sampleQuizItems(count = 6) {
-  const shuffled = [...quizBank].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, count);
+function sampleQuizItemsFromText(text, count = 6) {
+  const words = wordsFromPage(text);
+  return words.slice(0, count).map((word) => ({ prompt: buildPrompt(word), answer: word }));
 }
 
 function buildQuiz() {
   quizListEl.innerHTML = "";
-  const items = sampleQuizItems();
+  const items = sampleQuizItemsFromText(pages[currentPage].text);
+  if (!items.length) {
+    quizFeedbackEl.textContent = "No words on this page to practice yet.";
+    return;
+  }
   items.forEach((item, idx) => {
     const row = document.createElement("div");
     row.className = "quiz__item";
