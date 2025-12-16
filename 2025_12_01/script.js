@@ -288,6 +288,7 @@ let currentPage = 0;
 let currentUtterance = null;
 let currentAudio = null;
 const audioCache = new Map();
+const imagePreloadCache = new Map();
 let wordSpans = [];
 let wordBoundaries = [];
 let highlightInterval = null;
@@ -420,6 +421,29 @@ function renderPage() {
   pageImageEl.appendChild(img);
   prevBtn.disabled = currentPage === 0;
   nextBtn.disabled = currentPage === pages.length - 1;
+}
+
+// Preload story art to avoid slow first renders when flipping pages.
+function preloadImage(src) {
+  if (!src) return Promise.resolve(false);
+  if (imagePreloadCache.has(src)) return imagePreloadCache.get(src);
+  const promise = new Promise((resolve) => {
+    const img = new Image();
+    img.decoding = "async";
+    img.onload = () => resolve(true);
+    img.onerror = () => resolve(false);
+    img.src = src;
+  });
+  imagePreloadCache.set(src, promise);
+  return promise;
+}
+
+function preloadStoryImages(story = activeStory) {
+  if (!story?.pages?.length) return;
+  const sources = Array.from(
+    new Set(story.pages.map((page) => page?.image?.src).filter(Boolean))
+  );
+  sources.forEach((src) => preloadImage(src));
 }
 
 function updateVoiceStatus(message, tone = "muted") {
@@ -708,6 +732,7 @@ function setActiveStory(storyId) {
   stopAllAudio();
   renderPage();
   updateStoryLabels();
+  preloadStoryImages(activeStory);
 }
 
 function setActiveTest(testId) {
@@ -726,6 +751,7 @@ function setActiveTest(testId) {
   stopAllAudio();
   renderPage();
   updateStoryLabels();
+  preloadStoryImages(activeStory);
 }
 
 prevBtn.addEventListener("click", prevPage);
@@ -768,6 +794,7 @@ function initializeStorybook() {
     updateSpeedLabel();
     renderSpellTestList();
     updateWordBank();
+    preloadStoryImages(activeStory);
   } catch (error) {
     console.error(error);
     updateVoiceStatus("Could not load the story content. Please refresh to try again.", "warning");
