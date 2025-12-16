@@ -3,15 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Great RV Art Show</title>
+  <title>Spellbound Storybooks</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="backdrop"></div>
   <main class="story">
+    <section class="library-bar">
+      <div class="picker">
+        <p class="eyebrow">Test</p>
+        <select id="test-select" class="picker__select" aria-label="Choose a spelling test"></select>
+      </div>
+      <div class="picker">
+        <p class="eyebrow">Story</p>
+        <select id="story-select" class="picker__select" aria-label="Choose a story"></select>
+      </div>
+      <div class="chip" id="story-chip">December 1st test • RV trip</div>
+    </section>
+
     <div class="page-meta">
-      <p class="eyebrow">Page <span id="page-number">1</span> of 6</p>
+      <div class="page-meta__info">
+        <p class="eyebrow" id="active-test-label">December 1st test</p>
+        <p class="story-name" id="active-story-label">RV trip</p>
+      </div>
+      <p class="eyebrow page-meta__page">Page <span id="page-number">1</span> of <span id="page-total">6</span></p>
     </div>
+
+    <div class="word-bank" id="word-bank" aria-live="polite"></div>
 
     <div class="page">
       <div class="page__image" id="page-image" aria-hidden="true">
